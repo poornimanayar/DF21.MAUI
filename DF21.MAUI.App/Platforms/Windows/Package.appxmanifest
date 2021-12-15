@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap rescap">
+
+  <Identity
+    Name="40D22818-D9B1-4A91-BD70-674609EA2580"
+    Publisher="CN=User Name"
+    Version="1.0.0.0" />
+
+  <Properties>
+    <DisplayName>DF21.MAUI.App</DisplayName>
+    <PublisherDisplayName>Poornima Nayar</PublisherDisplayName>
+    <Logo>Assets\appiconStoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="x-generate"/>
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+      Executable="$targetnametoken$.exe"
+      EntryPoint="$targetentrypoint$">
+      <uap:VisualElements
+        DisplayName="DF21.MAUI.App"
+        Description="DF21.MAUI.App"
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\appiconMediumTile.png"
+        Square44x44Logo="Assets\appiconLogo.png">
+        <uap:DefaultTile
+          Wide310x150Logo="Assets\appiconWideTile.png"
+          Square71x71Logo="Assets\appiconSmallTile.png"
+          Square310x310Logo="Assets\appiconLargeTile.png"
+          ShortName="DF21.MAUI.App">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="square150x150Logo"/>
+            <uap:ShowOn Tile="wide310x150Logo"/>
+          </uap:ShowNameOnTiles>
+        </uap:DefaultTile >
+        <uap:SplashScreen Image="Assets\appiconfgSplashScreen.png" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+
+</Package>

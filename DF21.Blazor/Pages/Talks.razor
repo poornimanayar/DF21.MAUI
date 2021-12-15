@@ -1,0 +1,101 @@
+﻿@page "/talks"
+@using System.Net.WebSockets
+@using System.Text
+
+@inject IUmbracoIntegrationService umbracoIntegrationService
+
+<div class="content">
+    <h1>Talks</h1>
+
+
+    @if (_messages != null && _messages.Any())
+    {
+        foreach (var message in _messages)
+        {
+            <div class="alert alert-info" role="alert">
+                @message
+            </div>
+        }
+    }
+
+    @if (_talks != null && _talks.Any())
+    {
+        <div class="row">
+            <div class="col-12 col-sm-12 col-lg-12">
+                @foreach (var talk in _talks)
+                {
+                    <div class="card mb-3 text-dark bg-light">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card-body">
+                                    <h3 class="card-title">@talk.Title</h3>
+                                    <p class="card-text">@talk.Speaker</p>
+                                    <p class="card-text"><small class="text-muted">@talk.Time.ToString("dd MMMM yyyy HH:MM") - @talk.Room</small></p>
+                                </div>
+                                <div class="card-footer">
+                                    <NavLink class="nav-link" href="@($"talkdetails/{talk.Key}")">
+                        <span class="oi oi-info" aria-hidden="true"></span> Details
+                    </NavLink>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+</div>
+
+
+
+
+@code {
+    private IEnumerable<TalkResponse> _talks;
+
+    CancellationTokenSource disposalTokenSource = new CancellationTokenSource();
+    ClientWebSocket webSocket = new ClientWebSocket();
+    string log = "";
+
+    private List<string> _messages = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTalks();
+
+        var clientUrl = await umbracoIntegrationService.GetWebPubSubClientUrl();
+        await webSocket.ConnectAsync(new Uri(clientUrl), disposalTokenSource.Token);
+        _ = ReceiveLoop();
+    }
+
+    async Task ReceiveLoop()
+    {
+        var buffer = new ArraySegment<byte>(new byte[1024]);
+        while (!disposalTokenSource.IsCancellationRequested)
+        {
+            // Note that the received block might only be part of a larger message. If this applies in your scenario,
+            // check the received.EndOfMessage and consider buffering the blocks until that property is true.
+            // Or use a higher-level library such as SignalR.
+            var received = await webSocket.ReceiveAsync(buffer, disposalTokenSource.Token);
+            var receivedAsText = Encoding.UTF8.GetString(buffer.Array, 0, received.Count);
+            log += $"Received: {receivedAsText}\n";
+            _messages.Add(receivedAsText);
+            await LoadTalks();
+            StateHasChanged();
+        }
+    }
+
+    public async Task LoadTalks()
+    {
+        _talks = await umbracoIntegrationService.GetTalks();
+    }
+
+    public void Dispose()
+    {
+        disposalTokenSource.Cancel();
+        _ = webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Bye", CancellationToken.None);
+    }
+
+
+
+}

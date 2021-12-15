@@ -1,0 +1,88 @@
+﻿@page "/talkdetails/{TalkId}"
+@inject IUmbracoIntegrationService umbracoIntegrationService
+
+<div class="content">
+    @if (talkDetails != null)
+    {
+        <h1>@talkDetails.TalkDetails.Title</h1>
+        <div class="row">
+            <div class="card mb-3 text-dark bg-light">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card-body">
+
+                            <p class="card-text">@talkDetails.TalkDetails.Speaker</p>
+                            <p class="card-text"><small class="text-muted">@talkDetails.TalkDetails.Time.ToString("dd MMMM yyyy HH:MM") - @talkDetails.TalkDetails.Room</small></p>
+                            <p class="card-text"><small class="text-muted">@talkDetails.TalkDetails.TalkDescription</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row">
+        <h3>Add a comment</h3>
+        <EditForm Model="@commentRequest" OnValidSubmit="@AddComments" >
+            <div class="mb-3">
+                <label for="@commentRequest.Title" class="form-label">Title</label>
+                <InputText @bind-Value="@commentRequest.Title" class="form-control"></InputText>
+            </div>
+            <div class="mb-3">
+                <label for="@commentRequest.CommentText" class="form-label">Comment</label>
+                <InputTextArea @bind-Value="@commentRequest.CommentText" class="form-control"></InputTextArea>
+            </div>
+
+            <div class="mb-3">
+                <label for="@commentRequest.Device" class="form-label">Device</label>
+                <InputText @bind-Value="@commentRequest.Device" class="form-control"></InputText>
+            </div>
+            <button class="btn btn-primary" type="submit">Add comments</button>
+        </EditForm>
+    </div>
+
+
+    @if (talkDetails != null && talkDetails.Comments != null && talkDetails.Comments.Any())
+    {
+        <div class="row">
+             <h3>Comments</h3>
+            @foreach (var comment in talkDetails.Comments)
+            {
+                <div class="card mb-3 text-dark bg-light">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-body">
+                                <p class="card-title">@comment.Title</p>
+                                <p class="card-text">@comment.CommentText</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string TalkId { get; set; }
+
+    private TalkWithComments talkDetails;
+
+    private string _status;
+
+    private CommentRequest commentRequest = new CommentRequest();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        talkDetails = await umbracoIntegrationService.GetTalk(Guid.Parse(TalkId));
+        commentRequest.TalkKey = Guid.Parse(TalkId);
+        commentRequest.Device = $"{DeviceInfo.Name} - {DeviceInfo.Manufacturer} - {DeviceInfo.Model}";
+    }
+
+    private async Task AddComments()
+    {
+        _status = await umbracoIntegrationService.AddComment(commentRequest); 
+         talkDetails = await umbracoIntegrationService.GetTalk(Guid.Parse(TalkId));
+    }
+
+}

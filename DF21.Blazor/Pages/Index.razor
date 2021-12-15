@@ -1,0 +1,46 @@
+﻿@page "/"
+
+@using System.Net.WebSockets
+@using System.Text
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, DF21!</h1>
+
+@*
+
+@code {
+    CancellationTokenSource disposalTokenSource = new CancellationTokenSource();
+    ClientWebSocket webSocket = new ClientWebSocket();    
+    string log = "";
+
+    private List<string> _messages = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await webSocket.ConnectAsync(new Uri("wss://df21.webpubsub.azure.com/client/hubs/Hub?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ3c3M6Ly9kZjIxLndlYnB1YnN1Yi5henVyZS5jb20vY2xpZW50L2h1YnMvSHViIiwiaWF0IjoxNjM5MjI0NTI4LCJleHAiOjE2MzkyMjgxMjgsInJvbGUiOlsid2VicHVic3ViLnNlbmRUb0dyb3VwIl19.NLnztYuk8RRpHVA8Ze8J-fktrfokNai_aeYgvU8Wusk"), disposalTokenSource.Token);
+        _ = ReceiveLoop();
+    }
+
+    async Task ReceiveLoop()
+    {
+        var buffer = new ArraySegment<byte>(new byte[1024]);
+        while (!disposalTokenSource.IsCancellationRequested)
+        {
+            // Note that the received block might only be part of a larger message. If this applies in your scenario,
+            // check the received.EndOfMessage and consider buffering the blocks until that property is true.
+            // Or use a higher-level library such as SignalR.
+            var received = await webSocket.ReceiveAsync(buffer, disposalTokenSource.Token);
+            var receivedAsText = Encoding.UTF8.GetString(buffer.Array, 0, received.Count);
+            log += $"Received: {receivedAsText}\n";
+            _messages.Add(receivedAsText);
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        disposalTokenSource.Cancel();
+        _ = webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Bye", CancellationToken.None);
+    }
+
+}*@
