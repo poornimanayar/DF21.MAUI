@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DF21.Blazor", "DF21.Blazor\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DF21.MAUI.App", "DF21.MAUI.App\DF21.MAUI.App.csproj", "{AD9E1909-BD48-472D-BB67-E0FED9DF23D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DF21.Azure.WebPubSubClientToken", "DF21.Azure.WebPubSubClientToken\DF21.Azure.WebPubSubClientToken.csproj", "{0A87BAB7-82E6-4C57-B613-2812876EE172}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DF21.Azure.WebPubSubClientToken", "DF21.Azure.WebPubSubClientToken\DF21.Azure.WebPubSubClientToken.csproj", "{0A87BAB7-82E6-4C57-B613-2812876EE172}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DF21.RCL", "DF21.RCL\DF21.RCL.csproj", "{9ACEAC8E-88AA-4E8E-B539-733DB3481246}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,6 +30,10 @@ Global
 		{0A87BAB7-82E6-4C57-B613-2812876EE172}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A87BAB7-82E6-4C57-B613-2812876EE172}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A87BAB7-82E6-4C57-B613-2812876EE172}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9ACEAC8E-88AA-4E8E-B539-733DB3481246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ACEAC8E-88AA-4E8E-B539-733DB3481246}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ACEAC8E-88AA-4E8E-B539-733DB3481246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ACEAC8E-88AA-4E8E-B539-733DB3481246}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

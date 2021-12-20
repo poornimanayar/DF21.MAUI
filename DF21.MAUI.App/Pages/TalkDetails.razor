@@ -72,11 +72,12 @@
 
     private CommentRequest commentRequest = new CommentRequest();
 
+    
     protected override async Task OnParametersSetAsync()
     {
         talkDetails = await umbracoIntegrationService.GetTalk(Guid.Parse(TalkId));
         commentRequest.TalkKey = Guid.Parse(TalkId);
-        commentRequest.Device = $"{DeviceInfo.Name} - {DeviceInfo.Manufacturer} - {DeviceInfo.Model}";
+        commentRequest.Device = $"{DeviceInfo.Platform}";
     }
 
     private async Task AddComments()

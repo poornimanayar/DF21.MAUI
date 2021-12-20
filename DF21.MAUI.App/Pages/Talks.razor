@@ -34,8 +34,8 @@
                                 </div>
                                 <div class="card-footer">
                                     <NavLink class="nav-link" href="@($"talkdetails/{talk.Key}")">
-                        <span class="oi oi-info" aria-hidden="true"></span> Details
-                    </NavLink>
+                                        <span class="oi oi-info" aria-hidden="true"></span> Details
+                                    </NavLink>
                                 </div>
                             </div>
                         </div>
@@ -52,15 +52,15 @@
     private IEnumerable<TalkResponse> _talks;
 
     CancellationTokenSource disposalTokenSource = new CancellationTokenSource();
-    ClientWebSocket webSocket = new ClientWebSocket();    
+    ClientWebSocket webSocket = new ClientWebSocket();
     string log = "";
 
     private List<string> _messages = new List<string>();
 
     protected override async Task OnInitializedAsync()
     {
-       await LoadTalks();
-      
+        await LoadTalks();
+
         var clientUrl = await umbracoIntegrationService.GetWebPubSubClientUrl();
         await webSocket.ConnectAsync(new Uri(clientUrl), disposalTokenSource.Token);
 
@@ -79,6 +79,7 @@
             var receivedAsText = Encoding.UTF8.GetString(buffer.Array, 0, received.Count);
             log += $"Received: {receivedAsText}\n";
             _messages.Add(receivedAsText);
+            
             await LoadTalks();
             StateHasChanged();
         }

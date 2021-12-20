@@ -2,3 +2,36 @@
 
 <h1>Hello, DF21!</h1>
 
+<MyComponent ComponentText="Hello from the MAUI App to the Razor Class Library!"></MyComponent>
+
+
+@*@if (location != null)
+{
+    <p>Latitude : @location.Latitude</p>
+    <p>Longitude : @location.Longitude</p>
+    <p>Battery State : @batteryState</p>
+}*@
+
+
+@code {
+
+    private Location location;
+
+    private BatteryState batteryState;
+
+    private OrientationSensorData sensorData;
+
+    private bool _isAndroid = OperatingSystem.IsAndroid();
+
+    protected override async Task OnInitializedAsync()
+    {
+        //needs location settings turned on for windows
+        if (_isAndroid)
+        {
+            location = await Geolocation.GetLastKnownLocationAsync();
+            batteryState = Battery.State;          
+        }
+
+    }
+
+}

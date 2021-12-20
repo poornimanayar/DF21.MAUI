@@ -15,4 +15,8 @@
     <PackageReference Include="Websocket.Client" Version="4.4.43" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DF21.RCL\DF21.RCL.csproj" />
+  </ItemGroup>
+
 </Project>
